@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Local scratch / experiments (formerly the "ignore" folder convention)
+ignore/
+
+# macOS
+.DS_Store
+
+# Logs & local env
+*.log
+*.local
+.env
+.env.*

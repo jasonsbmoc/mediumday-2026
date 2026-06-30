@@ -1,0 +1,24 @@
+.zone {
+  position: absolute;
+  z-index: 0; /* behind grid cells (z-index: 1) */
+  overflow: hidden;
+  /* Same 2px outset ring as a grid cell, so the photo is framed on every side —
+     including edges facing open/void areas, where there's no neighbor cell to
+     paint the gridline. (overflow:hidden clips the <img>, not the box-shadow.) */
+  box-shadow: 0 0 0 var(--gap) var(--color-grid);
+  pointer-events: none; /* hover should hit the cells, not the photo */
+  transition-property: opacity;
+  transition-timing-function: ease;
+  will-change: opacity;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Zoom in so only a fraction of the photo shows — avoids film/frame edges
+     on the source images (the zone clips the overflow). */
+  transform: scale(1.6);
+  transform-origin: center;
+}

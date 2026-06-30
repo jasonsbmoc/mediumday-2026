@@ -1,0 +1,147 @@
+/* The whole section is one continuous, edge-to-edge grid between the section
+   rules: a 1-cell header row, the 4-row card carousel, and a 1-cell empty row.
+   The header/footer bands carry the same vertical gridlines as the cards via a
+   repeating gradient locked to the card-cell pitch (responsive without having
+   to guess a cell count). Their top/bottom lines come from the section rules
+   and the track borders. */
+.section {
+  --card-cell: var(--cell); /* shared page module (84 / 66 / 46) */
+  --pitch: calc(var(--card-cell) + var(--gap));
+  /* vertical cell lines, anchored at the left edge like the cards */
+  --grid-lines: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent var(--card-cell),
+    var(--color-grid) var(--card-cell),
+    var(--color-grid) var(--pitch)
+  );
+  position: relative;
+}
+
+/* Paper fill for the solid part of the section; the fringes above/below stay
+   transparent so their empty slots reveal the page and only the filled cells
+   poke out — giving an organic, non-rectangular edge. */
+.core {
+  background: var(--color-paper);
+  /* top/bottom lines for the header/footer band cells (the section's edges) */
+  border-top: var(--gap) solid var(--color-grid);
+  border-bottom: var(--gap) solid var(--color-grid);
+}
+
+.fringe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  overflow-x: clip; /* clip the right bleed without clipping vertical gridlines */
+}
+.fringeRow {
+  display: flex;
+  gap: var(--gap);
+}
+.fringeCell,
+.fringeGap {
+  flex: 0 0 var(--card-cell);
+  height: var(--card-cell);
+}
+.fringeCell {
+  background: var(--color-paper);
+  box-shadow: 0 0 0 var(--gap) var(--color-grid);
+}
+
+/* Header on the same cell lattice as the cards. */
+.headerBand {
+  height: var(--card-cell);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--card-cell));
+  column-gap: var(--gap);
+  align-items: center;
+  background-image: var(--grid-lines);
+}
+
+/* Title sits in an open block of 4 cells (paper fill covers the inner lines). */
+.titleBlock {
+  grid-column: 1 / 5;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  background: var(--color-paper);
+  box-shadow: 0 0 0 var(--gap) var(--color-grid);
+}
+.heading {
+  font-weight: var(--weight-medium);
+  font-size: 32px;
+  letter-spacing: -0.01em;
+}
+
+.nav {
+  grid-column: -3 / -1; /* the last two cells of the lattice */
+  display: flex;
+  gap: var(--gap);
+  height: 100%;
+}
+
+/* Arrow cells: paper filling one grid cell each, framed by the surrounding
+   gridlines (header gradient + core/track borders) rather than their own outset
+   border — so they're exactly one cell, not visually larger than their neighbors. */
+.arrow {
+  flex: 1;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: var(--color-paper);
+  color: #1a1a1a;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+.arrow:hover {
+  background: #1a1a1a;
+  color: var(--color-white);
+}
+
+/* Full-bleed track: cards touch via a shared 2px gridline. Top/bottom borders
+   supply the card row's top/bottom lines (clipped by overflow otherwise) and
+   stay continuous as the track scrolls. */
+.track {
+  display: flex;
+  gap: var(--gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-top: var(--gap) solid var(--color-grid);
+  border-bottom: var(--gap) solid var(--color-grid);
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Empty 1-cell row beneath the cards, same vertical gridlines. */
+.footerBand {
+  height: var(--card-cell);
+  background-image: var(--grid-lines);
+}
+
+@media (max-width: 1279px) {
+  .heading {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 767px) {
+  .titleBlock {
+    padding-left: 16px;
+  }
+  .heading {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+}

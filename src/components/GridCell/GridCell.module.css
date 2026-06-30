@@ -1,0 +1,35 @@
+.cell {
+  position: relative;
+  z-index: 1; /* above the ImageZone overlay (z-index: 0) */
+  width: var(--cell);
+  height: var(--cell);
+  /* Outset 2px ring fills the surrounding gap exactly. Adjacent cells'
+     gaps coincide → uniform 2px seam; cloud-edge cells get the same 2px
+     border into white. Void positions render no cell, so open areas stay
+     clean (no stray gridlines). */
+  box-shadow: 0 0 0 var(--gap) var(--color-grid);
+  transition-property: opacity;
+  transition-timing-function: ease;
+  will-change: opacity;
+}
+
+.paper {
+  background: var(--color-paper);
+}
+
+.clear {
+  background: var(--color-white);
+}
+
+.color {
+  /* background-color set inline from the accent palette */
+  cursor: default;
+}
+
+.image {
+  /* transparent: the shared photo behind shows through this window.
+     No gridline of its own, so the photo reads as one uninterrupted image
+     across its cells; edge lines come from the neighboring (non-image) cells. */
+  background: transparent;
+  box-shadow: none;
+}

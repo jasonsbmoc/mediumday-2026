@@ -1,0 +1,78 @@
+/* ============================================================
+   Söhne — loaded locally from /fonts/ (no CDN).
+   Only two weights exist in this repo, so we map:
+     · Mager (light)   -> weight 300  (subhead, date, muted text)
+     · Kräftig (medium) -> weight 500  (names, buttons, emphasis)
+   Filenames contain umlauts; URLs are percent-encoded for safety.
+   ============================================================ */
+@font-face {
+  font-family: 'Söhne';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../../fonts/S%C3%B6hne-Mager.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Söhne';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../fonts/S%C3%B6hne-Kr%C3%A4ftig.otf') format('opentype');
+}
+
+:root {
+  /* ---- Palette (from brief) ---- */
+  --color-white: #ffffff;
+  --color-paper: #faf8f3;
+  --color-grid: #b5aea3;
+  --color-yellow: #ffc017;
+  --color-green: #b6cd00;
+  --color-tan: #dacfbe;
+  --color-purple: #8a98da;
+  --color-rust: #cc7325;
+
+  /* ---- Grid cell size (overridden per breakpoint) ----
+     One shared module for the whole page (hero cloud + speaker section). */
+  --cell: 46px; /* mobile default; raised in media queries below */
+  --gap: 2px; /* gridline weight; a 2px outset shadow fills each cell's gutters */
+
+  /* ---- Type ---- */
+  --font-sohne: 'Söhne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --weight-light: 300;
+  --weight-medium: 500;
+
+  /* ---- Motion timings (brief) ---- */
+  --fade-ambient: 200ms;
+  --fade-hover: 150ms;
+
+  --maxw: 1080px;
+}
+
+@media (min-width: 768px) {
+  :root { --cell: 66px; }
+}
+@media (min-width: 1280px) {
+  :root { --cell: 84px; }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background: var(--color-white);
+  color: #1a1a1a;
+  font-family: var(--font-sohne);
+  font-weight: var(--weight-light);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+}

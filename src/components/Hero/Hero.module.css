@@ -1,0 +1,143 @@
+.hero {
+  position: relative;
+  /* number of cleared center columns (= 2*openHalf + 1 in heroLayouts) */
+  --open-cells: 9;
+  /* A touch under the viewport so the next section peeks above the fold. */
+  min-height: 88svh;
+  overflow: hidden;
+  background: var(--color-white);
+  /* Three rows: flexible top, the lockup, flexible bottom. The two flexible
+     rows balance, so the lockup is vertically centered — but the top row never
+     shrinks below the 2-row top band, so on short viewports the content drops
+     to just under the band instead of overlapping it. */
+  display: grid;
+  grid-template-rows: minmax(calc((var(--cell) + var(--gap)) * 2 + 24px), 1fr) auto 1fr;
+  justify-items: center;
+}
+
+/* The rotating tagline gets its own bottom row and centers within it, so it
+   lands at the vertical midpoint between the lockup and the speaker section
+   (the hero's bottom edge), closing the gap that opened when it was glued to
+   the lockup. */
+.rotator {
+  grid-row: 3;
+  align-self: center;
+  z-index: 3;
+}
+
+/* Cloud pinned to the top edge, thinning toward center (per layout density). */
+.cloudWrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-start; /* cloud anchored at x=0 (matches speaker lattice) */
+}
+
+/* Content lockup in the middle (auto) row, vertically centered by the grid. */
+.lockup {
+  grid-row: 2;
+  z-index: 3;
+  width: 100%;
+  /* Capped to the logo width, and never wider than the cleared corridor (which
+     is clear all the way down) so content can't overlap the grid at any height. */
+  max-width: min(
+    700px,
+    calc(var(--open-cells) * (var(--cell) + var(--gap)) - var(--cell))
+  );
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none; /* let hover reach grid cells around the clearing */
+}
+.lockup > * {
+  pointer-events: auto;
+}
+
+.wordmark {
+  width: 100%; /* fills the lockup (= logo width) */
+  height: auto;
+  display: block;
+}
+
+/* Three columns under the logo, at the logo's width: date · tagline · button.
+   The tagline takes the flexible middle track so it wraps to ~2 lines. */
+.meta {
+  width: 100%;
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start; /* top-align date, tagline, and button */
+  gap: 18px;
+  color: #1a1a1a;
+  letter-spacing: -0.015em; /* slightly tighter; inherited by date, tagline, button */
+}
+
+.date {
+  font-weight: var(--weight-light);
+  font-size: 21px;
+  white-space: nowrap;
+}
+
+.tagline {
+  font-weight: var(--weight-light);
+  font-size: 21px;
+  line-height: 1.2;
+  text-align: left; /* text stays left-aligned… */
+  justify-self: center; /* …but the block is centered in its column */
+  white-space: pre-line; /* honor the hard break after "virtual" */
+}
+
+.cta {
+  gap: 8px;
+  flex-shrink: 0;
+}
+/* Override the Button's medium weight — lighter Söhne reads better here. */
+.meta .cta {
+  font-weight: var(--weight-light);
+}
+.arrow {
+  transition: transform 150ms ease;
+}
+.cta:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Widen the cleared corridor on smaller breakpoints (must match openHalf in
+   heroLayouts: tablet openHalf 5 → 11 cells, mobile openHalf 3 → 7 cells). */
+@media (max-width: 1279px) {
+  .hero {
+    --open-cells: 11;
+  }
+}
+@media (max-width: 767px) {
+  .hero {
+    --open-cells: 5;
+  }
+  /* Logo shrinks drastically; the row stacks into a centered column. */
+  .wordmark {
+    width: min(200px, 100%);
+  }
+  .meta {
+    grid-template-columns: 1fr; /* stack into a centered column */
+    justify-items: center;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .date,
+  .tagline {
+    font-size: 17px;
+    text-align: center;
+  }
+  .tagline {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+}

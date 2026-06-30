@@ -1,0 +1,7 @@
+/* 2px horizontal rule in the grid color separates major sections (brief). */
+.rule {
+  border: none;
+  height: 2px;
+  background: var(--color-grid);
+  margin: 0;
+}

@@ -1,0 +1,11 @@
+.cloud {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell));
+  grid-auto-rows: var(--cell);
+  gap: var(--gap); /* 2px gridline gutters; outset cell shadows fill them */
+  width: max-content;
+  /* Left-anchored at x=0 so the lattice matches the speaker section; sized to
+     the viewport in JS, so it just bleeds off the right edge (hero clips it). */
+  margin: 0;
+}
