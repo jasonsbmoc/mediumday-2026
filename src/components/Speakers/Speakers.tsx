@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ACCENT_COLORS, GAP_PX } from '../../types'
 import { mulberry32 } from '../../lib/random'
 import { useBreakpoint } from '../../hooks/useBreakpoint'
@@ -73,6 +73,31 @@ export function Speakers() {
   const { cell, width } = useBreakpoint()
   const cols = Math.ceil(width / (cell + GAP_PX)) + 1
 
+  // Disable each control once the track reaches that end (prevents the no-op /
+  // infinite-feeling presses, especially on touch).
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd] = useState(false)
+
+  const updateEdges = useCallback(() => {
+    const track = trackRef.current
+    if (!track) return
+    const max = track.scrollWidth - track.clientWidth
+    setAtStart(track.scrollLeft <= 1)
+    setAtEnd(track.scrollLeft >= max - 1) // also true when content doesn't overflow
+  }, [])
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    updateEdges()
+    track.addEventListener('scroll', updateEdges, { passive: true })
+    window.addEventListener('resize', updateEdges)
+    return () => {
+      track.removeEventListener('scroll', updateEdges)
+      window.removeEventListener('resize', updateEdges)
+    }
+  }, [updateEdges, cols])
+
   const scrollByCard = useCallback((dir: 1 | -1) => {
     const track = trackRef.current
     if (!track) return
@@ -101,6 +126,7 @@ export function Speakers() {
             className={styles.arrow}
             aria-label="Previous speakers"
             onClick={() => scrollByCard(-1)}
+            disabled={atStart}
           >
             <Chevron dir="left" />
           </button>
@@ -109,6 +135,7 @@ export function Speakers() {
             className={styles.arrow}
             aria-label="Next speakers"
             onClick={() => scrollByCard(1)}
+            disabled={atEnd}
           >
             <Chevron dir="right" />
           </button>

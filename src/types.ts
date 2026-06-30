@@ -29,4 +29,4 @@ export const CELL_PX = { mobile: 46, tablet: 66, desktop: 84 } as const
 export type Breakpoint = keyof typeof CELL_PX
 
 // Gridline gap between cells, in px (must match --gap in global.css).
-export const GAP_PX = 2
+export const GAP_PX = 1

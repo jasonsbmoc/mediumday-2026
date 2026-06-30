@@ -34,7 +34,7 @@
   /* ---- Grid cell size (overridden per breakpoint) ----
      One shared module for the whole page (hero cloud + speaker section). */
   --cell: 46px; /* mobile default; raised in media queries below */
-  --gap: 2px; /* gridline weight; a 2px outset shadow fills each cell's gutters */
+  --gap: 1px; /* gridline weight; an outset shadow of this size fills each cell's gutters (keep GAP_PX in types.ts in sync) */
 
   /* ---- Type ---- */
   --font-sohne: 'Söhne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

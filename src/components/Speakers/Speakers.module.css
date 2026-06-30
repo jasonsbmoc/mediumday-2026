@@ -98,9 +98,13 @@
     background-color 150ms ease,
     color 150ms ease;
 }
-.arrow:hover {
+.arrow:hover:not(:disabled) {
   background: #1a1a1a;
   color: var(--color-white);
+}
+.arrow:disabled {
+  color: var(--color-grid);
+  cursor: default;
 }
 
 /* Full-bleed track: cards touch via a shared 2px gridline. Top/bottom borders

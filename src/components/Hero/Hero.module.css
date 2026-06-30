@@ -116,22 +116,32 @@
   .hero {
     --open-cells: 5;
   }
-  /* Logo shrinks drastically; the row stacks into a centered column. */
+  /* Decouple the lockup from the narrow 5-cell carve: it sits well below the
+     top band (vertically centered), so it can be wider than the corridor
+     without overlapping grid cells. This lets the logo read at a usable size,
+     and lets the Register button fit inside the lockup so the stacked column
+     stays truly centered. */
+  .lockup {
+    max-width: min(330px, 86vw);
+    padding: 0 16px;
+  }
   .wordmark {
-    width: min(200px, 100%);
+    width: 100%;
   }
   .meta {
     grid-template-columns: 1fr; /* stack into a centered column */
     justify-items: center;
-    gap: 14px;
-    margin-top: 20px;
+    text-align: center;
+    gap: 16px;
+    margin-top: 24px;
   }
   .date,
   .tagline {
-    font-size: 17px;
+    font-size: 19px;
     text-align: center;
   }
   .tagline {
+    justify-self: center;
     max-width: none;
   }
 }

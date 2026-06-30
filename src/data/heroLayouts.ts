@@ -58,18 +58,26 @@ export function buildCloud({
   // at least one photo is always in view (more on wider screens), not just at
   // the extreme edges. Placed in the top band (rows 0–1).
   const zoneOf = new Map<string, string>() // "r,c" -> zoneId
-  const placeZone = (c: number): boolean => {
-    if (c < 0 || c + 1 > cols - 1) return false // must fit 2 columns
+  const placeZone = (c: number, w = 2): boolean => {
+    if (c < 0 || c + w - 1 > cols - 1) return false // must fit w columns
     // Staggered vertical start (rows 0–1, 1–2, or 2–3), stable per column, so
     // photos sit on different planes rather than all in the top two rows.
     const r0 = Math.min(maxRows - 2, Math.floor(mulberry32(colSeed(c))() * 3))
     const id = `z${c}`
     for (let dr = 0; dr < 2; dr++)
-      for (let dc = 0; dc < 2; dc++) zoneOf.set(`${r0 + dr},${c + dc}`, id)
+      for (let dc = 0; dc < w; dc++) zoneOf.set(`${r0 + dr},${c + dc}`, id)
     return true
   }
   for (let step = 0; step < 10; step++) {
-    placeZone(centerCol + openHalf + 1 + step * 4) // right of the clearing
+    // The first window right of the clearing is a wider 2×3 rectangle (vs the
+    // usual 2×2 square) — an asymmetric beat that echoes our marketing assets.
+    // Falls back to a square if 3 columns don't fit at this viewport width.
+    const rightCol = centerCol + openHalf + 1 + step * 4
+    if (step === 0) {
+      if (!placeZone(rightCol, 3)) placeZone(rightCol, 2)
+    } else {
+      placeZone(rightCol)
+    }
     placeZone(centerCol - openHalf - 2 - step * 4) // left of the clearing
   }
 

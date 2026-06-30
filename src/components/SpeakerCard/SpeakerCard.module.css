@@ -56,7 +56,7 @@
 }
 .nameText {
   font-weight: var(--weight-medium);
-  font-size: 20px;
+  font-size: 23px;
   line-height: 1.05;
   letter-spacing: -0.01em;
   color: #1a1a1a;
@@ -64,12 +64,12 @@
 .title {
   font-weight: var(--weight-light);
   font-size: 13px;
-  color: var(--color-grid);
+  color: #1a1a1a;
 }
 
 @media (max-width: 1279px) {
   .nameText {
-    font-size: 16px;
+    font-size: 18px;
   }
   .title {
     font-size: 12px;
