@@ -5,9 +5,35 @@ export const EVENT = {
   // Hard break kept via `white-space: pre-line` in the hero styles.
   tagline: 'A live, free, virtual\ncommunity gathering.',
   ctaLabel: 'Register now',
+  // Closing call-to-action above the footer.
+  finalCtaLine: 'Join us on September 18',
 }
 
 // Speaker data now lives in ./speakers.ts (backed by assets/speakers/).
+
+// Footer link columns. Placeholder hrefs (real Medium URLs) — routing gets
+// wired up for real once this lands in the monorepo.
+export type FooterLink = { label: string; href: string }
+
+export const FOOTER_LINKS: FooterLink[][] = [
+  [
+    { label: 'About', href: 'https://medium.com/about' },
+    { label: 'Membership', href: 'https://medium.com/membership' },
+    { label: 'Start reading', href: 'https://medium.com/' },
+  ],
+  [
+    { label: 'Careers', href: 'https://medium.com/jobs-at-medium' },
+    { label: 'Press', href: 'https://blog.medium.com/' },
+    { label: 'Blog', href: 'https://blog.medium.com/' },
+    { label: 'Store', href: 'https://medium.myshopify.com/' },
+  ],
+  [
+    { label: 'Help', href: 'https://help.medium.com/' },
+    { label: 'Privacy', href: 'https://policy.medium.com/medium-privacy-policy-f03bf92035c9' },
+    { label: 'Rules', href: 'https://policy.medium.com/medium-rules-30e5502c4eb4' },
+    { label: 'Terms', href: 'https://policy.medium.com/medium-terms-of-service-9db0094a1e0f' },
+  ],
+]
 
 export type FaqItem = { q: string; a: string }
 

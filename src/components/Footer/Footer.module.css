@@ -1,0 +1,76 @@
+/* White background; the hairline rule separates the footer, and the links
+   themselves are paper-toned so they read very light against it. */
+.footer {
+  background: var(--color-white);
+  border-top: 1px solid var(--color-grid);
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 72px 24px 80px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+/* Logo takes roughly the left third; large and clickable. */
+.brand {
+  flex: 1 1 32%;
+  min-width: 220px;
+  display: inline-block;
+}
+.logo {
+  display: block;
+  width: min(240px, 100%);
+  aspect-ratio: 1000 / 220; /* the wordmark SVG's intrinsic ratio */
+  /* Placeholder for the design-system gray token — swap in-codebase. */
+  background-color: #b3b3b3;
+  -webkit-mask: url('../../../assets/Medium-Wordmark-Black.svg') center / contain
+    no-repeat;
+  mask: url('../../../assets/Medium-Wordmark-Black.svg') center / contain
+    no-repeat;
+}
+
+.columns {
+  flex: 2 1 55%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.column {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.link {
+  font-weight: var(--weight-light);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: #b3b3b3; /* placeholder for the design-system gray token */
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+.link:hover {
+  color: #1a1a1a; /* black on hover */
+}
+
+@media (max-width: 767px) {
+  .inner {
+    padding: 48px 24px 56px;
+    gap: 36px;
+  }
+  .logo {
+    width: min(200px, 70%);
+  }
+  .columns {
+    flex-basis: 100%;
+    gap: 28px 24px;
+  }
+}

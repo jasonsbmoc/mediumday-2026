@@ -1,0 +1,40 @@
+.section {
+  padding: 104px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  text-align: center;
+  /* Paper-fill band to break up the page; the footer's own top border closes
+     off the bottom, so only a top rule is needed here. */
+  background: var(--color-paper);
+  border-top: 1px solid var(--color-grid);
+}
+
+/* Matches the hero rotator's line style. */
+.line {
+  margin: 0;
+  font-weight: var(--weight-light);
+  font-size: clamp(22px, 2.5vw, 33px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+}
+
+.cta {
+  gap: 8px;
+  font-weight: var(--weight-light); /* match the hero button */
+}
+.arrow {
+  transition: transform 150ms ease;
+}
+.cta:hover .arrow {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+}
