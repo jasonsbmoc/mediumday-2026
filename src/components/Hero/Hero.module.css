@@ -115,6 +115,14 @@
 @media (max-width: 767px) {
   .hero {
     --open-cells: 5;
+    /* Taller hero so nothing at the top feels cramped: the header content sits
+       around the visible center (top spacer has a larger min to clear the
+       cloud), and the rotator's row gets extra weight so there's roughly double
+       the breathing room above and below the tagline. It's fine for the rotator
+       to sit low / just past the fold. */
+    min-height: 118svh;
+    grid-template-rows:
+      minmax(calc((var(--cell) + var(--gap)) * 4), 1fr) auto 1.5fr;
   }
   /* Decouple the lockup from the narrow 5-cell carve: it sits well below the
      top band (vertically centered), so it can be wider than the corridor
@@ -143,6 +151,12 @@
   .tagline {
     justify-self: center;
     max-width: none;
+  }
+  /* Give the button breathing room above it so spacing feels even. A touch
+     more than the logo→date gap to offset the "Day" descender, which makes the
+     space under the logo read larger than it measures. */
+  .cta {
+    margin-top: 12px;
   }
 }
 

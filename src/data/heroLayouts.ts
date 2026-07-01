@@ -26,13 +26,17 @@ export type HeroParams = {
   topBand: number // solid rows across the full width
   openHalf: number // half-width (in cols) of the center clearing
   sideDepth: number // rows the outermost columns reach
+  rightPhotoDrop?: number // extra rows to push the first right-side photo down
 }
 
 // openHalf must stay in sync with --open-cells in Hero.module.css (2*openHalf+1).
+// Mobile: deeper/taller cloud + the right photo dropped a row, so the two photos
+// aren't on the same plane and the top-right reads less uniform (the header
+// content moves down on mobile to make room — see Hero.module.css).
 export const HERO_PARAMS: Record<Breakpoint, HeroParams> = {
   desktop: { maxRows: 7, topBand: 2, openHalf: 4, sideDepth: 6.4 },
   tablet: { maxRows: 7, topBand: 2, openHalf: 5, sideDepth: 6 },
-  mobile: { maxRows: 6, topBand: 2, openHalf: 2, sideDepth: 5 },
+  mobile: { maxRows: 7, topBand: 2, openHalf: 2, sideDepth: 6, rightPhotoDrop: 1 },
 }
 
 const u32 = (n: number) => n >>> 0
@@ -53,16 +57,21 @@ export function buildCloud({
   topBand,
   openHalf,
   sideDepth,
+  rightPhotoDrop = 0,
 }: HeroParams & { cols: number; centerCol: number }): CloudLayout {
   // 2×2 image zones flanking the clearing on both sides, stepping outward — so
   // at least one photo is always in view (more on wider screens), not just at
   // the extreme edges. Placed in the top band (rows 0–1).
   const zoneOf = new Map<string, string>() // "r,c" -> zoneId
-  const placeZone = (c: number, w = 2): boolean => {
+  const placeZone = (c: number, w = 2, drop = 0): boolean => {
     if (c < 0 || c + w - 1 > cols - 1) return false // must fit w columns
     // Staggered vertical start (rows 0–1, 1–2, or 2–3), stable per column, so
     // photos sit on different planes rather than all in the top two rows.
-    const r0 = Math.min(maxRows - 2, Math.floor(mulberry32(colSeed(c))() * 3))
+    // `drop` nudges specific zones down an extra row (used on mobile).
+    const r0 = Math.min(
+      maxRows - 2,
+      Math.floor(mulberry32(colSeed(c))() * 3) + drop,
+    )
     const id = `z${c}`
     for (let dr = 0; dr < 2; dr++)
       for (let dc = 0; dc < w; dc++) zoneOf.set(`${r0 + dr},${c + dc}`, id)
@@ -74,7 +83,9 @@ export function buildCloud({
     // Falls back to a square if 3 columns don't fit at this viewport width.
     const rightCol = centerCol + openHalf + 1 + step * 4
     if (step === 0) {
-      if (!placeZone(rightCol, 3)) placeZone(rightCol, 2)
+      // Drop the in-view right photo (mobile) so it's off the left photo's plane.
+      if (!placeZone(rightCol, 3, rightPhotoDrop))
+        placeZone(rightCol, 2, rightPhotoDrop)
     } else {
       placeZone(rightCol)
     }

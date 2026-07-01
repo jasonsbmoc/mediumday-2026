@@ -1,12 +1,29 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ACCENT_COLORS, GAP_PX } from '../../types'
+import { ACCENT_COLORS, GAP_PX, type Breakpoint } from '../../types'
 import { mulberry32 } from '../../lib/random'
 import { useBreakpoint } from '../../hooks/useBreakpoint'
 import { SPEAKERS } from '../../data/speakers'
 import { SpeakerCard } from '../SpeakerCard/SpeakerCard'
 import styles from './Speakers.module.css'
 
-const FRINGE_ROWS = 2
+type FringeConfig = {
+  rows: number // depth of the fringe (cells beyond the core edge)
+  reach: number // how far from the biased edge cells stay dense (0..1)
+  peak: number // density right at the biased corner
+  slope: number // how fast density falls toward the far edge
+  floor: number // stray-cell probability past `reach`
+  falloff: number // per-row sparsening away from the core
+  inset: number // pull the right-biased cluster in this many columns (the right
+  // edge is clipped by overflow, so peaking at the very edge hides the cluster)
+}
+
+// The default barely shows at narrow widths (few columns → few dense cells), so
+// mobile gets a deeper, denser fringe, and the right cluster is inset so it
+// isn't lost in the clipped right edge.
+const FRINGE_CONFIG: Record<'mobile' | 'default', FringeConfig> = {
+  mobile: { rows: 2, reach: 0.3, peak: 1.1, slope: 1.3, floor: 0.2, falloff: 0.22, inset: 1 },
+  default: { rows: 2, reach: 0.28, peak: 0.92, slope: 2.6, floor: 0.05, falloff: 0.45, inset: 0 },
+}
 
 // A ragged, asymmetric cloud of cells extending the grid beyond the section's
 // straight edge. Density is biased to one corner (top→left, bottom→right) and
@@ -16,16 +33,20 @@ function Fringe({
   cols,
   edge,
   bias,
+  breakpoint,
 }: {
   cols: number
   edge: 'top' | 'bottom'
   bias: 'left' | 'right'
+  breakpoint: Breakpoint
 }) {
   const rows = useMemo(() => {
+    const cfg =
+      breakpoint === 'mobile' ? FRINGE_CONFIG.mobile : FRINGE_CONFIG.default
     const out: { present: boolean; color: string | null }[][] = []
-    for (let rr = 0; rr < FRINGE_ROWS; rr++) {
-      const distFromCore = edge === 'top' ? FRINGE_ROWS - 1 - rr : rr
-      const rowFactor = 1 - distFromCore * 0.45 // outer rows sparser
+    for (let rr = 0; rr < cfg.rows; rr++) {
+      const distFromCore = edge === 'top' ? cfg.rows - 1 - rr : rr
+      const rowFactor = 1 - distFromCore * cfg.falloff // outer rows sparser
       const cells = []
       for (let c = 0; c < cols; c++) {
         const seed =
@@ -34,9 +55,16 @@ function Fringe({
             (edge === 'top' ? 0xa11ce : 0xb0b)) >>>
           0
         const rng = mulberry32(seed)
-        const t = cols <= 1 ? 0 : c / (cols - 1)
-        const edgeDist = bias === 'left' ? t : 1 - t
-        const base = edgeDist < 0.28 ? Math.max(0, 0.92 - edgeDist * 2.6) : 0.05
+        // Distance (in columns) from the biased edge, with the right cluster
+        // pulled inward so it lands on visible columns rather than the clipped
+        // right edge.
+        const edgeCol = bias === 'left' ? c : cols - 1 - c
+        const adj = Math.max(0, edgeCol - (bias === 'right' ? cfg.inset : 0))
+        const edgeDist = cols <= 1 ? 0 : adj / (cols - 1)
+        const base =
+          edgeDist < cfg.reach
+            ? Math.max(cfg.floor, cfg.peak - edgeDist * cfg.slope)
+            : cfg.floor
         const present = rng() < base * rowFactor
         const color =
           present && rng() < 0.16
@@ -47,7 +75,7 @@ function Fringe({
       out.push(cells)
     }
     return out
-  }, [cols, edge, bias])
+  }, [cols, edge, bias, breakpoint])
 
   return (
     <div className={styles.fringe} aria-hidden="true">
@@ -70,7 +98,7 @@ function Fringe({
 
 export function Speakers() {
   const trackRef = useRef<HTMLDivElement>(null)
-  const { cell, width } = useBreakpoint()
+  const { breakpoint, cell, width } = useBreakpoint()
   const cols = Math.ceil(width / (cell + GAP_PX)) + 1
 
   // Disable each control once the track reaches that end (prevents the no-op /
@@ -110,7 +138,7 @@ export function Speakers() {
   return (
     <section className={styles.section} aria-labelledby="speakers-heading">
       {/* organic top edge — cluster biased to the left */}
-      <Fringe cols={cols} edge="top" bias="left" />
+      <Fringe cols={cols} edge="top" bias="left" breakpoint={breakpoint} />
 
       <div className={styles.core}>
       {/* 1-cell-tall header row */}
@@ -153,7 +181,7 @@ export function Speakers() {
       </div>
 
       {/* organic bottom edge — cluster biased to the right */}
-      <Fringe cols={cols} edge="bottom" bias="right" />
+      <Fringe cols={cols} edge="bottom" bias="right" breakpoint={breakpoint} />
     </section>
   )
 }
