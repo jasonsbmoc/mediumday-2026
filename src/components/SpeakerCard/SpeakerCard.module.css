@@ -77,10 +77,21 @@
 }
 @media (max-width: 767px) {
   .nameText {
-    font-size: 14px;
+    font-size: 16px;
   }
   .title {
     font-size: 11px;
+  }
+  /* One row taller, with the name/title card given two rows so longer titles
+     wrap without clipping. (SpeakerCard renders 10 right-column cells here to
+     match the extra row — keep in sync.) */
+  .card {
+    grid-template-rows: repeat(5, var(--card-cell));
+  }
+  .name {
+    grid-row: 4 / 6;
+    justify-content: flex-start; /* top-align in the taller card */
+    padding-top: 14px;
   }
 }
 

@@ -1,5 +1,4 @@
 // Featured speakers. Headshots live in assets/speakers/<slug>.jpg.
-// Titles are PLACEHOLDER pending real copy — only the names + photos are real.
 
 const headshots = import.meta.glob<string>(
   '../../assets/speakers/*.{jpg,jpeg,png}',
@@ -20,11 +19,11 @@ export type Speaker = {
 
 const ROSTER: Omit<Speaker, 'image'>[] = [
   { slug: 'tony-stubblebine', name: 'Tony Stubblebine', title: 'CEO of Medium' },
-  { slug: 'cassie-mcdaniel', name: 'Cassie McDaniel', title: 'Design · TK' },
-  { slug: 'zulie-rane', name: 'Zulie Rane', title: 'Writer · TK' },
-  { slug: 'brad-greenlee', name: 'Brad Greenlee', title: 'Engineering · TK' },
-  { slug: 'kassandra-mendes', name: 'Kassandra Mendes', title: 'Writer · TK' },
-  { slug: 'jason-combs', name: 'Jason Combs', title: 'Design · TK' },
+  { slug: 'cassie-mcdaniel', name: 'Cassie McDaniel', title: 'VP of Design, Medium' },
+  { slug: 'zulie-rane', name: 'Zulie Rane', title: 'Senior Product Marketer, Medium' },
+  { slug: 'brad-greenlee', name: 'Brad Greenlee', title: 'Principal Software Engineer, TK' },
+  { slug: 'kassandra-mendes', name: 'Kassandra Mendes', title: 'Community Manager, Medium' },
+  { slug: 'jason-combs', name: 'Jason Combs', title: 'Brand Design Lead, Medium' },
 ]
 
 export const SPEAKERS: Speaker[] = ROSTER.map((s) => ({
