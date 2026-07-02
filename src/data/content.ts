@@ -5,8 +5,8 @@ export const EVENT = {
   // Hard break kept via `white-space: pre-line` in the hero styles.
   tagline: 'A live, free, virtual\ncommunity gathering.',
   ctaLabel: 'Register now',
-  // Closing call-to-action above the footer.
-  finalCtaLine: 'Join us on September 18',
+  // Closing call-to-action above the footer (the event tagline).
+  finalCtaLine: 'Discover something.',
 }
 
 // Speaker data now lives in ./speakers.ts (backed by assets/speakers/).

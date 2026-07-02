@@ -1,4 +1,6 @@
 .section {
+  position: relative;
+  overflow: hidden; /* clip the cursor-trail blocks to the band */
   padding: 104px 24px;
   display: flex;
   flex-wrap: wrap;
@@ -12,8 +14,24 @@
   border-top: 1px solid var(--color-grid);
 }
 
+/* Cursor-trail layer: colored cells snapped to the grid lattice, behind the
+   content. pointer-events off so the button stays clickable. */
+.trail {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.block {
+  position: absolute;
+  /* opacity set inline (per-cell strength; 0 when retiring). Pops in, fades out. */
+  transition: opacity 450ms ease; /* keep in sync with FADE_MS */
+}
+
 /* Matches the hero rotator's line style. */
 .line {
+  position: relative;
+  z-index: 1; /* above the trail layer */
   margin: 0;
   font-weight: var(--weight-light);
   font-size: clamp(22px, 2.5vw, 33px);
@@ -23,6 +41,8 @@
 }
 
 .cta {
+  position: relative;
+  z-index: 1; /* above the trail layer */
   gap: 8px;
   font-weight: var(--weight-light); /* match the hero button */
 }
