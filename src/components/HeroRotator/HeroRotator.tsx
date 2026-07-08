@@ -21,6 +21,11 @@ const LINES: ReactNode[] = [
     <br />
     workshops with Medium staff.
   </>,
+  <>
+    <b>Live meetups</b> with Medium
+    <br />
+    writers and editors.
+  </>,
 ]
 
 export type HeroRotatorProps = {

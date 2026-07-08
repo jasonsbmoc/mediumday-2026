@@ -64,7 +64,9 @@
 .title {
   font-weight: var(--weight-light);
   font-size: 13px;
+  line-height: 1.15; /* tighter rhythm for multi-line titles */
   color: #1a1a1a;
+  white-space: pre-line; /* honor forced \n breaks in titles (e.g. Michael's) */
 }
 
 @media (max-width: 1279px) {
@@ -91,7 +93,7 @@
   .name {
     grid-row: 4 / 6;
     justify-content: flex-start; /* top-align in the taller card */
-    padding-top: 14px;
+    padding-top: 10px;
   }
 }
 

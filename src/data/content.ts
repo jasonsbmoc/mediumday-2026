@@ -40,22 +40,22 @@ export type FaqItem = { q: string; a: string }
 export const FAQ: FaqItem[] = [
   {
     q: 'When and where is Medium Day?',
-    a: 'Medium Day is on September 18, 2026, held entirely online. Sessions run throughout the day across multiple tracks.',
+    a: 'Medium Day is on September 18, 2026, held entirely on Zoom. Sessions run throughout the day across multiple tracks.',
   },
   {
     q: 'How much does it cost to attend?',
-    a: 'Medium Day is free to attend. Registration gets you access to every session and the on-demand recordings afterward.',
+    a: 'Medium Day is free to attend. Registration gets you access to general sessions and the on-demand recordings afterward. Select sessions will require a Friend of Medium membership — more details coming soon.',
   },
   {
-    q: 'Do I need a Medium account?',
-    a: 'A free Medium account lets you save sessions, follow speakers, and pick up where you left off — but anyone can register and watch.',
+    q: 'Do I need a Zoom account?',
+    a: 'Yes. Sign up for a free Zoom account using your Medium email address to register and save Medium Day sessions.',
   },
   {
-    q: 'Will sessions be recorded?',
-    a: 'Yes. Registered attendees can revisit every talk on demand in the weeks following the event.',
+    q: 'What can I expect at Medium Day?',
+    a: 'A full day of virtual sessions across four tracks: Craft (become a better writer), Perspectives (learn from real experts), Platform (get more out of Medium), and Community (meet your people). Whether you’re a longtime writer or reader on Medium, there’s something for you to discover. And stay tuned for an exclusive fifth track coming soon!',
   },
   {
     q: 'Can I speak or host a session?',
-    a: 'Each year we open a call for speakers from the Medium community. Watch this page and your inbox for the submission window.',
+    a: 'Each year, we open a call for speakers from the Medium community. This year’s speaker applications are now closed. If you’d like to participate in our next Medium Day, watch your inbox for 2027’s Call for Speakers.',
   },
 ]
